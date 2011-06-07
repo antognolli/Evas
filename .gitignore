@@ -30,3 +30,13 @@ Makefile.in
 tags
 cscope.out
 /config.cache
+/ABOUT-NLS
+/config.cache-env
+doc/Doxyfile
+m4/libtool.m4
+m4/ltoptions.m4
+m4/ltsugar.m4
+m4/ltversion.m4
+m4/lt~obsolete.m4
+src/bin/evas_cserve
+src/bin/evas_cserve_tool
