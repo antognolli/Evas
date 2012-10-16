@@ -1510,7 +1510,8 @@ evas_render_updates_internal(Evas *eo_e,
                      (obj->cur.visible) &&
                      (!obj->delete_me) &&
                      (obj->cur.cache.clip.visible) &&
-                     (!obj->is_smart)))
+                     (!obj->is_smart) && 
+                     (!obj->is_frame)))
           /*	  obscuring_objects = eina_list_append(obscuring_objects, obj); */
           eina_array_push(&e->obscuring_objects, obj);
      }
@@ -1607,6 +1608,13 @@ evas_render_updates_internal(Evas *eo_e,
                        if ((e->temporary_objects.count > offset) &&
                            (eina_array_data_get(&e->temporary_objects, offset) == obj))
                          offset++;
+
+                       if ((!obj->is_frame) && (!obj->smart.parent))
+                         RECTS_CLIP_TO_RECT(cx, cy, cw, ch, 
+                                            e->framespace.x, e->framespace.y, 
+                                            (e->viewport.w - e->framespace.w),
+                                            (e->viewport.h - e->framespace.h));
+
                        x = cx; y = cy; w = cw; h = ch;
                        if (((w > 0) && (h > 0)) || (obj->is_smart))
                          {
