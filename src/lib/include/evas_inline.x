@@ -297,4 +297,59 @@ evas_object_clip_recalc(Evas_Object *eo_obj, Evas_Object_Protected_Data *obj)
    obj->cur.cache.clip.dirty = EINA_FALSE;
 }
 
+static inline Eina_Bool 
+evas_object_in_framespace(Evas_Public_Data *e_pd, Evas_Object_Protected_Data *eo_pd)
+{
+   Eina_Rectangle erect;
+
+   if ((eo_pd->is_frame) || (eo_pd->smart.parent)) return EINA_FALSE;
+
+   EINA_RECTANGLE_SET(&erect, 0, 0, e_pd->framespace.x, e_pd->framespace.y);
+
+   return eina_rectangle_coords_inside(&erect, eo_pd->cur.geometry.x, 
+                                       eo_pd->cur.geometry.y);
+}
+
+static inline void 
+evas_object_framespace_adjustment_set(Evas_Object *obj, Evas_Coord *x, Evas_Coord *y)
+{
+   Evas_Object_Protected_Data *eo_pd;
+
+   if (!(eo_pd = eo_data_get(obj, EVAS_OBJ_CLASS))) return;
+
+   /* skip frame objects */
+   if (eo_pd->is_frame) return;
+
+   /* if this object has a smart parent, we do not need to account for 
+    * framespace as that will be accounted for in the parent object */
+   if (eo_pd->smart.parent) return;
+
+   if (evas_object_in_framespace(eo_pd->layer->evas, eo_pd))
+     {
+        if (x) *x = (*x + eo_pd->layer->evas->framespace.x);
+        if (y) *y = (*y + eo_pd->layer->evas->framespace.y);
+     }
+}
+
+static inline void 
+evas_object_framespace_adjustment_get(Evas_Object *obj, Evas_Coord *x, Evas_Coord *y)
+{
+   Evas_Object_Protected_Data *eo_pd;
+
+   if (!(eo_pd = eo_data_get(obj, EVAS_OBJ_CLASS))) return;
+
+   /* skip frame objects */
+   if (eo_pd->is_frame) return;
+
+   /* if this object has a smart parent, we do not need to account for 
+    * framespace as that will be accounted for in the parent object */
+   if (eo_pd->smart.parent) return;
+
+   if (evas_object_in_framespace(eo_pd->layer->evas, eo_pd))
+     {
+        if ((x) && (*x > 0)) *x = (*x - eo_pd->layer->evas->framespace.x);
+        if ((y) && (*y > 0)) *y = (*y - eo_pd->layer->evas->framespace.y);
+     }
+}
+
 #endif
