@@ -391,7 +391,8 @@ _canvas_event_feed_mouse_down(Eo *eo_e, void *_pd, va_list *list)
         if (obj->delete_me) continue;
         ev.canvas.x = e->pointer.x;
         ev.canvas.y = e->pointer.y;
-        _evas_event_framespace_adjust(eo_obj, &ev.canvas.x, &ev.canvas.y);
+        evas_object_framespace_adjustment_get(eo_obj, 
+                                              &ev.canvas.x, &ev.canvas.y);
         _evas_event_havemap_adjust(eo_obj, obj, &ev.canvas.x, &ev.canvas.y, obj->mouse_grabbed);
 
         if (!e->is_frozen)
@@ -444,7 +445,8 @@ _post_up_handle(Evas *eo_e, unsigned int timestamp, const void *data)
         Evas_Object_Protected_Data *obj = eo_data_get(eo_obj, EVAS_OBJ_CLASS);
         ev.canvas.x = e->pointer.x;
         ev.canvas.y = e->pointer.y;
-        _evas_event_framespace_adjust(eo_obj, &ev.canvas.x, &ev.canvas.y);
+        evas_object_framespace_adjustment_get(eo_obj, 
+                                              &ev.canvas.x, &ev.canvas.y);
         _evas_event_havemap_adjust(eo_obj, obj, &ev.canvas.x, &ev.canvas.y, obj->mouse_grabbed);
         if ((!eina_list_data_find(ins, eo_obj)) ||
             (!e->pointer.inside))
@@ -485,7 +487,9 @@ _post_up_handle(Evas *eo_e, unsigned int timestamp, const void *data)
              Evas_Object_Protected_Data *obj_itr = eo_data_get(eo_obj_itr, EVAS_OBJ_CLASS);
              ev_in.canvas.x = e->pointer.x;
              ev_in.canvas.y = e->pointer.y;
-             _evas_event_framespace_adjust(eo_obj_itr, &ev_in.canvas.x, &ev_in.canvas.y);
+             evas_object_framespace_adjustment_get(eo_obj_itr, 
+                                                   &ev_in.canvas.x, 
+                                                   &ev_in.canvas.y);
              _evas_event_havemap_adjust(eo_obj_itr, obj_itr, &ev_in.canvas.x, &ev_in.canvas.y, obj_itr->mouse_grabbed);
              if (!eina_list_data_find(e->pointer.object.in, eo_obj_itr))
                {
@@ -585,7 +589,8 @@ _canvas_event_feed_mouse_up(Eo *eo_e, void *_pd, va_list *list)
              Evas_Object_Protected_Data *obj = eo_data_get(eo_obj, EVAS_OBJ_CLASS);
              ev.canvas.x = e->pointer.x;
              ev.canvas.y = e->pointer.y;
-             _evas_event_framespace_adjust(eo_obj, &ev.canvas.x, &ev.canvas.y);
+             evas_object_framespace_adjustment_get(eo_obj, 
+                                                   &ev.canvas.x, &ev.canvas.y);
              _evas_event_havemap_adjust(eo_obj, obj, &ev.canvas.x, &ev.canvas.y, obj->mouse_grabbed);
              if ((obj->pointer_mode == EVAS_OBJECT_POINTER_MODE_AUTOGRAB) &&
                  (obj->mouse_grabbed > 0))
@@ -711,7 +716,8 @@ _canvas_event_feed_mouse_wheel(Eo *eo_e, void *_pd, va_list *list)
         Evas_Object_Protected_Data *obj = eo_data_get(eo_obj, EVAS_OBJ_CLASS);
         ev.canvas.x = e->pointer.x;
         ev.canvas.y = e->pointer.y;
-        _evas_event_framespace_adjust(eo_obj, &ev.canvas.x, &ev.canvas.y);
+        evas_object_framespace_adjustment_get(eo_obj, 
+                                              &ev.canvas.x, &ev.canvas.y);
         _evas_event_havemap_adjust(eo_obj, obj, &ev.canvas.x, &ev.canvas.y, obj->mouse_grabbed);
         if ((!e->is_frozen) && !evas_event_freezes_through(eo_obj, obj))
           evas_object_event_callback_call(eo_obj, obj, EVAS_CALLBACK_MOUSE_WHEEL, &ev, event_id);
@@ -803,7 +809,9 @@ _canvas_event_feed_mouse_move(Eo *eo_e, void *_pd, va_list *list)
                   Evas_Object_Protected_Data *obj = eo_data_get(eo_obj, EVAS_OBJ_CLASS);
                   ev.cur.canvas.x = e->pointer.x;
                   ev.cur.canvas.y = e->pointer.y;
-                  _evas_event_framespace_adjust(eo_obj, &ev.cur.canvas.x, &ev.cur.canvas.y);
+                  evas_object_framespace_adjustment_get(eo_obj, 
+                                                        &ev.cur.canvas.x, 
+                                                        &ev.cur.canvas.y);
                   _evas_event_havemap_adjust(eo_obj, obj, &ev.cur.canvas.x,
                                              &ev.cur.canvas.y,
                                              obj->mouse_grabbed);
@@ -864,7 +872,9 @@ _canvas_event_feed_mouse_move(Eo *eo_e, void *_pd, va_list *list)
                     {
                        ev.canvas.x = e->pointer.x;
                        ev.canvas.y = e->pointer.y;
-                       _evas_event_framespace_adjust(eo_obj, &ev.canvas.x, &ev.canvas.y);
+                       evas_object_framespace_adjustment_get(eo_obj, 
+                                                             &ev.canvas.x, 
+                                                             &ev.canvas.y);
                        _evas_event_havemap_adjust(eo_obj, obj, &ev.canvas.x, &ev.canvas.y, obj->mouse_grabbed);
                        e->pointer.object.in = eina_list_remove(e->pointer.object.in, eo_obj);
                        if (obj->mouse_in)
@@ -975,7 +985,9 @@ _canvas_event_feed_mouse_move(Eo *eo_e, void *_pd, va_list *list)
                        obj->mouse_in = 0;
                        ev2.canvas.x = e->pointer.x;
                        ev2.canvas.y = e->pointer.y;
-                       _evas_event_framespace_adjust(eo_obj, &ev2.canvas.x, &ev2.canvas.y);
+                       evas_object_framespace_adjustment_get(eo_obj, 
+                                                             &ev2.canvas.x, 
+                                                             &ev2.canvas.y);
                        _evas_event_havemap_adjust(eo_obj, obj, &ev2.canvas.x, &ev2.canvas.y, obj->mouse_grabbed);
                        if (!e->is_frozen)
                           evas_object_event_callback_call(eo_obj, obj, EVAS_CALLBACK_MOUSE_OUT, &ev2, event_id);
@@ -995,7 +1007,9 @@ _canvas_event_feed_mouse_move(Eo *eo_e, void *_pd, va_list *list)
              Evas_Object_Protected_Data *obj = eo_data_get(eo_obj, EVAS_OBJ_CLASS);
              ev3.canvas.x = e->pointer.x;
              ev3.canvas.y = e->pointer.y;
-             _evas_event_framespace_adjust(eo_obj, &ev3.canvas.x, &ev3.canvas.y);
+             evas_object_framespace_adjustment_get(eo_obj, 
+                                                   &ev3.canvas.x, 
+                                                   &ev3.canvas.y);
              _evas_event_havemap_adjust(eo_obj, obj, &ev3.canvas.x, &ev3.canvas.y, obj->mouse_grabbed);
              /* if its not in the old list of ins send an enter event */
              if (!eina_list_data_find(e->pointer.object.in, eo_obj))
@@ -1137,7 +1151,9 @@ nogrep:
                     {
                        ev.cur.canvas.x = e->pointer.x;
                        ev.cur.canvas.y = e->pointer.y;
-                       _evas_event_framespace_adjust(eo_obj, &ev.cur.canvas.x, &ev.cur.canvas.y);
+                       evas_object_framespace_adjustment_get(eo_obj, 
+                                                             &ev.cur.canvas.x, 
+                                                             &ev.cur.canvas.y);
                        _evas_event_havemap_adjust(eo_obj, obj, &ev.cur.canvas.x, &ev.cur.canvas.y, obj->mouse_grabbed);
                        evas_object_event_callback_call(eo_obj, obj, EVAS_CALLBACK_MOUSE_MOVE, &ev, event_id);
                     }
@@ -1150,7 +1166,9 @@ nogrep:
                        obj->mouse_in = 0;
                        ev2.canvas.x = e->pointer.x;
                        ev2.canvas.y = e->pointer.y;
-                       _evas_event_framespace_adjust(eo_obj, &ev2.canvas.x, &ev2.canvas.y);
+                       evas_object_framespace_adjustment_get(eo_obj, 
+                                                             &ev2.canvas.x, 
+                                                             &ev2.canvas.y);
                        _evas_event_havemap_adjust(eo_obj, obj, &ev2.canvas.x, &ev2.canvas.y, obj->mouse_grabbed);
                        if (!e->is_frozen)
                           evas_object_event_callback_call(eo_obj, obj, EVAS_CALLBACK_MOUSE_OUT, &ev2, event_id);
@@ -1170,7 +1188,9 @@ nogrep:
              Evas_Object_Protected_Data *obj = eo_data_get(eo_obj, EVAS_OBJ_CLASS);
              ev3.canvas.x = e->pointer.x;
              ev3.canvas.y = e->pointer.y;
-             _evas_event_framespace_adjust(eo_obj, &ev3.canvas.x, &ev3.canvas.y);
+             evas_object_framespace_adjustment_get(eo_obj, 
+                                                   &ev3.canvas.x, 
+                                                   &ev3.canvas.y);
              _evas_event_havemap_adjust(eo_obj, obj, &ev3.canvas.x, &ev3.canvas.y, obj->mouse_grabbed);
              /* if its not in the old list of ins send an enter event */
              if (!eina_list_data_find(e->pointer.object.in, eo_obj))
@@ -1249,7 +1269,8 @@ _canvas_event_feed_mouse_in(Eo *eo_e, void *_pd, va_list *list)
         Evas_Object_Protected_Data *obj = eo_data_get(eo_obj, EVAS_OBJ_CLASS);
         ev.canvas.x = e->pointer.x;
         ev.canvas.y = e->pointer.y;
-        _evas_event_framespace_adjust(eo_obj, &ev.canvas.x, &ev.canvas.y);
+        evas_object_framespace_adjustment_get(eo_obj, 
+                                              &ev.canvas.x, &ev.canvas.y);
         _evas_event_havemap_adjust(eo_obj, obj, &ev.canvas.x, &ev.canvas.y, obj->mouse_grabbed);
         if (!eina_list_data_find(e->pointer.object.in, eo_obj))
           {
@@ -1326,7 +1347,8 @@ _canvas_event_feed_mouse_out(Eo *eo_e, void *_pd, va_list *list)
              Evas_Object_Protected_Data *obj = eo_data_get(eo_obj, EVAS_OBJ_CLASS);
              ev.canvas.x = e->pointer.x;
              ev.canvas.y = e->pointer.y;
-             _evas_event_framespace_adjust(eo_obj, &ev.canvas.x, &ev.canvas.y);
+             evas_object_framespace_adjustment_get(eo_obj, 
+                                                   &ev.canvas.x, &ev.canvas.y);
              _evas_event_havemap_adjust(eo_obj, obj, &ev.canvas.x, &ev.canvas.y, obj->mouse_grabbed);
              if (obj->mouse_in)
                {
@@ -1442,7 +1464,8 @@ _canvas_event_feed_multi_down(Eo *eo_e, void *_pd, va_list *list)
         ev.canvas.y = y;
         ev.canvas.xsub = fx;
         ev.canvas.ysub = fy;
-        _evas_event_framespace_adjust(eo_obj, &ev.canvas.x, &ev.canvas.y);
+        evas_object_framespace_adjustment_get(eo_obj, 
+                                              &ev.canvas.x, &ev.canvas.y);
         _evas_event_havemap_adjust(eo_obj, obj, &ev.canvas.x, &ev.canvas.y, obj->mouse_grabbed);
         if (x != ev.canvas.x)
           ev.canvas.xsub = ev.canvas.x; // fixme - lost precision
@@ -1539,7 +1562,8 @@ _canvas_event_feed_multi_up(Eo *eo_e, void *_pd, va_list *list)
         ev.canvas.y = y;
         ev.canvas.xsub = fx;
         ev.canvas.ysub = fy;
-        _evas_event_framespace_adjust(eo_obj, &ev.canvas.x, &ev.canvas.y);
+        evas_object_framespace_adjustment_get(eo_obj, 
+                                              &ev.canvas.x, &ev.canvas.y);
         _evas_event_havemap_adjust(eo_obj, obj, &ev.canvas.x, &ev.canvas.y, obj->mouse_grabbed);
         if (x != ev.canvas.x)
           ev.canvas.xsub = ev.canvas.x; // fixme - lost precision
@@ -1653,7 +1677,9 @@ _canvas_event_feed_multi_move(Eo *eo_e, void *_pd, va_list *list)
                   ev.cur.canvas.y = y;
                   ev.cur.canvas.xsub = fx;
                   ev.cur.canvas.ysub = fy;
-                  _evas_event_framespace_adjust(eo_obj, &ev.cur.canvas.x, &ev.cur.canvas.y);
+                  evas_object_framespace_adjustment_get(eo_obj, 
+                                                        &ev.cur.canvas.x, 
+                                                        &ev.cur.canvas.y);
                   _evas_event_havemap_adjust(eo_obj, obj, &ev.cur.canvas.x, &ev.cur.canvas.y, obj->mouse_grabbed);
                   if (x != ev.cur.canvas.x)
                     ev.cur.canvas.xsub = ev.cur.canvas.x; // fixme - lost precision
@@ -1724,7 +1750,9 @@ _canvas_event_feed_multi_move(Eo *eo_e, void *_pd, va_list *list)
                   ev.cur.canvas.y = y;
                   ev.cur.canvas.xsub = fx;
                   ev.cur.canvas.ysub = fy;
-                  _evas_event_framespace_adjust(eo_obj, &ev.cur.canvas.x, &ev.cur.canvas.y);
+                  evas_object_framespace_adjustment_get(eo_obj, 
+                                                        &ev.cur.canvas.x, 
+                                                        &ev.cur.canvas.y);
                   _evas_event_havemap_adjust(eo_obj, obj, &ev.cur.canvas.x, &ev.cur.canvas.y, obj->mouse_grabbed);
                   if (x != ev.cur.canvas.x)
                     ev.cur.canvas.xsub = ev.cur.canvas.x; // fixme - lost precision
