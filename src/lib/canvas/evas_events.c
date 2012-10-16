@@ -23,22 +23,6 @@ _evas_event_havemap_adjust(Evas_Object *eo_obj EINA_UNUSED, Evas_Object_Protecte
    *y += obj->cur.geometry.y;
 }
 
-static void
-_evas_event_framespace_adjust(Evas_Object *eo_obj, Evas_Coord *x, Evas_Coord *y)
-{
-  Evas_Object_Protected_Data *obj = eo_data_get(eo_obj, EVAS_OBJ_CLASS);
-  if (obj->is_frame) return;
-  
-  if ((!obj->smart.parent) && (obj->is_smart))
-    {
-       Evas_Public_Data *evas;
-
-       evas = obj->layer->evas;
-       if (x) *x -= evas->framespace.x;
-       if (y) *y -= evas->framespace.y;
-    }
-}
-
 static Eina_List *
 _evas_event_object_list_raw_in_get(Evas *eo_e, Eina_List *in,
                                    const Eina_Inlist *list, Evas_Object *stop,
