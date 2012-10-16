@@ -860,7 +860,6 @@ evas_object_geometry_get(const Evas_Object *eo_obj, Evas_Coord *x, Evas_Coord *y
 static void
 _position_get(Eo *eo_obj EINA_UNUSED, void *_pd, va_list *list)
 {
-   Evas_Public_Data *evas;
    int nx = 0, ny = 0;
 
    const Evas_Object_Protected_Data *obj = _pd;
