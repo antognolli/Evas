@@ -691,10 +691,8 @@ static void
 _position_set(Eo *eo_obj, void *_pd, va_list *list)
 {
    Evas_Object_Protected_Data *obj = _pd;
-
    Evas_Coord x = va_arg(*list, Evas_Coord);
    Evas_Coord y = va_arg(*list, Evas_Coord);
-
    Evas_Public_Data *evas;
    Eina_Bool is, was = EINA_FALSE;
    Eina_Bool pass = EINA_FALSE, freeze = EINA_FALSE;
@@ -703,7 +701,6 @@ _position_set(Eo *eo_obj, void *_pd, va_list *list)
 
    if (obj->delete_me) return;
 
-   evas = obj->layer->evas;
    evas_object_framespace_adjustment_set(eo_obj, &x, &y);
 
    if (evas_object_intercept_call_move(eo_obj, obj, x, y)) return;
