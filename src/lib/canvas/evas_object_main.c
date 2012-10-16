@@ -703,21 +703,10 @@ _position_set(Eo *eo_obj, void *_pd, va_list *list)
 
    if (obj->delete_me) return;
 
-   nx = x;
-   ny = y;
-
    evas = obj->layer->evas;
+   evas_object_framespace_adjustment_set(eo_obj, &x, &y);
 
-   if ((!obj->is_frame) && (eo_obj != evas->framespace.clip))
-     {
-        if ((!obj->smart.parent) && (obj->is_smart))
-          {
-             nx += evas->framespace.x;
-             ny += evas->framespace.y;
-          }
-     }
-
-   if (evas_object_intercept_call_move(eo_obj, obj, nx, ny)) return;
+   if (evas_object_intercept_call_move(eo_obj, obj, x, y)) return;
 
    if (obj->doing.in_move > 0)
      {
@@ -725,7 +714,7 @@ _position_set(Eo *eo_obj, void *_pd, va_list *list)
         return;
      }
 
-   if ((obj->cur.geometry.x == nx) && (obj->cur.geometry.y == ny)) return;
+   if ((obj->cur.geometry.x == x) && (obj->cur.geometry.y == y)) return;
 
    if (!(obj->layer->evas->is_frozen))
      {
@@ -741,11 +730,11 @@ _position_set(Eo *eo_obj, void *_pd, va_list *list)
 
    if (obj->is_smart)
      {
-        eo_do(eo_obj, evas_obj_smart_move(nx, ny));
+        eo_do(eo_obj, evas_obj_smart_move(x, y));
      }
 
-   obj->cur.geometry.x = nx;
-   obj->cur.geometry.y = ny;
+   obj->cur.geometry.x = x;
+   obj->cur.geometry.y = y;
 
    evas_object_update_bounding_box(eo_obj, obj);
 
