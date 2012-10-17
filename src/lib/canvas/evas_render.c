@@ -1510,8 +1510,7 @@ evas_render_updates_internal(Evas *eo_e,
                      (obj->cur.visible) &&
                      (!obj->delete_me) &&
                      (obj->cur.cache.clip.visible) &&
-                     (!obj->is_smart) && 
-                     (!obj->is_frame)))
+                     (!obj->is_smart)))
           /*	  obscuring_objects = eina_list_append(obscuring_objects, obj); */
           eina_array_push(&e->obscuring_objects, obj);
      }
