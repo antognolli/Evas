@@ -876,7 +876,16 @@ _position_get(Eo *eo_obj EINA_UNUSED, void *_pd, va_list *list)
    nx = obj->cur.geometry.x;
    ny = obj->cur.geometry.y;
 
-   evas_object_framespace_adjustment_get(_pd, &nx, &ny);
+   /* avoid a call to framespace_adjustment_get here because we 
+    * don't want yet Another Eo lookup for data we already have */
+   if ((!obj->is_frame) && (!obj->smart.parent))
+     {
+        if (evas_object_in_framespace(obj->layer->evas, obj))
+          {
+             nx += obj->layer->evas->framespace.x;
+             ny += obj->layer->evas->framespace.y;
+          }
+     }
 
    if (x) *x = nx;
    if (y) *y = ny;
