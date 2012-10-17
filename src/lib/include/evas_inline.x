@@ -298,16 +298,17 @@ evas_object_clip_recalc(Evas_Object *eo_obj, Evas_Object_Protected_Data *obj)
 }
 
 static inline Eina_Bool 
-evas_object_in_framespace(Evas_Public_Data *e_pd, Evas_Object_Protected_Data *eo_pd)
+evas_object_in_framespace(const Evas_Public_Data *e_pd, const Evas_Object_Protected_Data *eo_pd)
 {
-   Eina_Rectangle erect;
-
    if ((eo_pd->is_frame) || (eo_pd->smart.parent)) return EINA_FALSE;
 
-   EINA_RECTANGLE_SET(&erect, 0, 0, e_pd->framespace.x, e_pd->framespace.y);
+   if (((eo_pd->cur.geometry.x >= 0) && 
+        (eo_pd->cur.geometry.x <= e_pd->framespace.x)) || 
+       ((eo_pd->cur.geometry.y >= 0) && 
+           (eo_pd->cur.geometry.y <= e_pd->framespace.y)))
+     return EINA_TRUE;
 
-   return eina_rectangle_coords_inside(&erect, eo_pd->cur.geometry.x, 
-                                       eo_pd->cur.geometry.y);
+   return EINA_FALSE;
 }
 
 static inline void 
