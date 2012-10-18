@@ -1642,7 +1642,7 @@ evas_render_updates_internal(Evas *eo_e,
                             e->engine.func->context_clip_set(e->engine.data.output,
                                                              e->engine.data.context,
                                                              x, y, w, h);
-#if 1 /* FIXME: this can slow things down... figure out optimum... coverage */
+#if 0 /* FIXME: this can slow things down... figure out optimum... coverage */
                             for (j = offset; j < e->temporary_objects.count; ++j)
                               {
                                  Evas_Object_Protected_Data *obj2;
