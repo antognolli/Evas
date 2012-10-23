@@ -64,7 +64,7 @@ evas_outbuf_setup(int w, int h, int rot, Eina_Bool alpha, void *dest)
         ob->priv.buffer = 
           (RGBA_Image *)evas_cache2_image_data(evas_common_image_cache2_get(), 
                                                w, h, ob->priv.dest, 
-                                               1, EVAS_COLORSPACE_ARGB8888);
+                                               alpha, EVAS_COLORSPACE_ARGB8888);
      }
    else
 #endif
@@ -72,7 +72,7 @@ evas_outbuf_setup(int w, int h, int rot, Eina_Bool alpha, void *dest)
         ob->priv.buffer = 
           (RGBA_Image *)evas_cache_image_data(evas_common_image_cache_get(), 
                                               w, h, ob->priv.dest, 
-                                              1, EVAS_COLORSPACE_ARGB8888);
+                                              alpha, EVAS_COLORSPACE_ARGB8888);
      }
 
    return ob;
