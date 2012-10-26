@@ -693,14 +693,13 @@ _position_set(Eo *eo_obj, void *_pd, va_list *list)
    Evas_Object_Protected_Data *obj = _pd;
    Evas_Coord x = va_arg(*list, Evas_Coord);
    Evas_Coord y = va_arg(*list, Evas_Coord);
-   Evas_Public_Data *evas;
    Eina_Bool is, was = EINA_FALSE;
    Eina_Bool pass = EINA_FALSE, freeze = EINA_FALSE;
    Eina_Bool source_invisible = EINA_FALSE;
-   int nx = 0, ny = 0;
 
    if (obj->delete_me) return;
 
+   printf("Object Position Set: %p\n", eo_obj);
    evas_object_framespace_adjustment_set(eo_obj, &x, &y);
 
    if (evas_object_intercept_call_move(eo_obj, obj, x, y)) return;
@@ -713,6 +712,7 @@ _position_set(Eo *eo_obj, void *_pd, va_list *list)
 
    if ((obj->cur.geometry.x == x) && (obj->cur.geometry.y == y)) return;
 
+   printf("\tDoing Actual Move To: %d %d\n", x, y);
    if (!(obj->layer->evas->is_frozen))
      {
         pass = evas_event_passes_through(eo_obj, obj);
@@ -873,19 +873,14 @@ _position_get(Eo *eo_obj EINA_UNUSED, void *_pd, va_list *list)
         return;
      }
 
+   printf("Object Position Get: %p\n", eo_obj);
    nx = obj->cur.geometry.x;
    ny = obj->cur.geometry.y;
+   printf("\tCurrent Geom: %d %d\n", nx, ny);
 
-   /* avoid a call to framespace_adjustment_get here because we 
-    * don't want yet Another Eo lookup for data we already have */
-   if ((!obj->is_frame) && (!obj->smart.parent))
-     {
-        if (evas_object_in_framespace(obj->layer->evas, obj))
-          {
-             nx += obj->layer->evas->framespace.x;
-             ny += obj->layer->evas->framespace.y;
-          }
-     }
+   evas_object_framespace_adjustment_get(obj->object, &nx, &ny);
+
+   printf("\tNew Geom: %d %d\n", nx, ny);
 
    if (x) *x = nx;
    if (y) *y = ny;
@@ -2153,8 +2148,21 @@ static void
 _is_frame_object_set(Eo *eo_obj EINA_UNUSED, void *_pd, va_list *list)
 {
    Evas_Object_Protected_Data *obj = _pd;
+
    Eina_Bool is_frame = va_arg(*list, int);
    obj->is_frame = is_frame;
+
+   if (obj->is_frame)
+     {
+        Evas_Public_Data *epd;
+
+        epd = obj->layer->evas;
+
+        if (obj->cur.geometry.x > 0)
+          obj->cur.geometry.x -= epd->framespace.x;
+        if (obj->cur.geometry.y > 0)
+          obj->cur.geometry.y -= epd->framespace.y;
+     }
 }
 
 EAPI Eina_Bool
