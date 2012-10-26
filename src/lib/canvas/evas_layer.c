@@ -20,6 +20,14 @@ evas_object_inject(Evas_Object *eo_obj EINA_UNUSED, Evas_Object_Protected_Data *
    lay->usage++;
    obj->layer = lay;
    obj->in_layer = 1;
+
+   /* evas_object_framespace_adjustment_set(obj->object, &obj->cur.geometry.x,  */
+   /*                                       &obj->cur.geometry.y); */
+
+   if (obj->cur.geometry.x >= 0)
+     obj->cur.geometry.x = obj->layer->evas->framespace.x;
+   if (obj->cur.geometry.y >= 0)
+     obj->cur.geometry.y = obj->layer->evas->framespace.y;
 }
 
 void
