@@ -323,13 +323,15 @@ evas_object_framespace_adjustment_set(Evas_Object *obj, Evas_Coord *x, Evas_Coor
 
    /* if this object has a smart parent, we do not need to account for 
     * framespace as that will be accounted for in the parent object */
-   if (eo_pd->smart.parent) return;
+   // if (eo_pd->smart.parent) return;
 
-   if (evas_object_in_framespace(eo_pd->layer->evas, eo_pd))
+   // if (evas_object_in_framespace(eo_pd->layer->evas, eo_pd))
+     // printf("setting new pos1: %p: %d,%d\n", obj, *x, *y);
      {
         if (x) *x = (*x + eo_pd->layer->evas->framespace.x);
         if (y) *y = (*y + eo_pd->layer->evas->framespace.y);
      }
+     // printf("setting new pos2: %p: %d,%d\n", obj, *x, *y);
 }
 
 static inline void 
@@ -344,13 +346,14 @@ evas_object_framespace_adjustment_get(Evas_Object *obj, Evas_Coord *x, Evas_Coor
 
    /* if this object has a smart parent, we do not need to account for 
     * framespace as that will be accounted for in the parent object */
-   if (eo_pd->smart.parent) return;
+   // if (eo_pd->smart.parent) return;
 
-   if (evas_object_in_framespace(eo_pd->layer->evas, eo_pd))
+   // if (evas_object_in_framespace(eo_pd->layer->evas, eo_pd))
      {
         if ((x) && (*x > 0)) *x = (*x - eo_pd->layer->evas->framespace.x);
         if ((y) && (*y > 0)) *y = (*y - eo_pd->layer->evas->framespace.y);
      }
+     // printf("getting new pos obj: %p: %d,%d\n", obj, *x, *y);
 }
 
 #endif

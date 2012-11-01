@@ -693,6 +693,8 @@ _position_set(Eo *eo_obj, void *_pd, va_list *list)
    Evas_Object_Protected_Data *obj = _pd;
    Evas_Coord x = va_arg(*list, Evas_Coord);
    Evas_Coord y = va_arg(*list, Evas_Coord);
+   Evas_Coord orig_x = x;
+   Evas_Coord orig_y = y;
    Eina_Bool is, was = EINA_FALSE;
    Eina_Bool pass = EINA_FALSE, freeze = EINA_FALSE;
    Eina_Bool source_invisible = EINA_FALSE;
@@ -727,7 +729,7 @@ _position_set(Eo *eo_obj, void *_pd, va_list *list)
 
    if (obj->is_smart)
      {
-        eo_do(eo_obj, evas_obj_smart_move(x, y));
+        eo_do(eo_obj, evas_obj_smart_move(orig_x, orig_y));
      }
 
    obj->cur.geometry.x = x;
@@ -2145,16 +2147,21 @@ evas_object_is_frame_object_set(Evas_Object *eo_obj, Eina_Bool is_frame)
 }
 
 static void
-_is_frame_object_set(Eo *eo_obj EINA_UNUSED, void *_pd, va_list *list)
+_is_frame_object_set(Eo *eo_obj, void *_pd, va_list *list)
 {
    Evas_Object_Protected_Data *obj = _pd;
 
    Eina_Bool is_frame = va_arg(*list, int);
    obj->is_frame = is_frame;
 
+   // FIXME: This method will break things if called more than once
+   // on the same object.
+
    if (obj->is_frame)
      {
         Evas_Public_Data *epd;
+        const Eina_Inlist *lst;
+        Evas_Object_Protected_Data *child;
 
         epd = obj->layer->evas;
 
@@ -2162,6 +2169,12 @@ _is_frame_object_set(Eo *eo_obj EINA_UNUSED, void *_pd, va_list *list)
           obj->cur.geometry.x -= epd->framespace.x;
         if (obj->cur.geometry.y > 0)
           obj->cur.geometry.y -= epd->framespace.y;
+
+        lst = evas_object_smart_members_get_direct(eo_obj);
+        EINA_INLIST_FOREACH(lst, child)
+          {
+             evas_object_is_frame_object_set(child->object, is_frame);
+          }
      }
 }
 

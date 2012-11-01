@@ -250,6 +250,7 @@ _smart_member_add(Eo *smart_obj, void *_pd, va_list *list)
    evas_object_smart_member_cache_invalidate(eo_obj, EINA_TRUE, EINA_TRUE,
                                              EINA_TRUE);
    obj->restack = 1;
+   obj->is_frame = smart->is_frame;
    evas_object_change(eo_obj, obj);
    evas_object_mapped_clip_across_mark(eo_obj, obj);
    if (smart->smart.smart && smart->smart.smart->smart_class->member_add)
